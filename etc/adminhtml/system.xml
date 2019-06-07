@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <!-- Add new Tab -->
+        <tab id="scommerce" translate="label" sortOrder="400">
+            <label>Scommerce Configuration</label>
+        </tab>
+        <section id="scommerce_seobase"
+                 translate="label"
+                 type="text"
+                 sortOrder="10"
+                 showInDefault="1"
+                 showInWebsite="1"
+                 showInStore="1">
+            <label>SEO Base</label>
+            <tab>scommerce</tab>
+            <!-- resource tag name which we have to defined in the acl.xml -->
+            <resource>Scommerce_SeoBase::config_seobase</resource>
+            <group id="general"
+                   translate="label"
+                   type="text"
+                   sortOrder="20"
+                   showInDefault="1"
+                   showInWebsite="1"
+                   showInStore="1">
+                <field id="exclude_categories"
+                       translate="label"
+                       type="multiselect"
+                       sortOrder="60"
+                       showInDefault="1"
+                       showInWebsite="1"
+                       showInStore="1">
+                    <label>Exclude Root Categories</label>
+                    <source_model>Scommerce\SeoBase\Model\ExcludeCategories</source_model>
+                    <comment><![CDATA[Exclude some root categories to appear in parent category dropdown against products]]></comment>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>
