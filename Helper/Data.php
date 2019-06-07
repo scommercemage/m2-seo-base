@@ -30,8 +30,12 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * @var modulesList array
      */
-    protected $_modulesList = array('Scommerce_CatalogUrl', 'Scommerce_SeoSitemap');
-    
+    protected $_modulesList = array(
+                                'Scommerce_CatalogUrl',
+                                'Scommerce_SeoSitemap', 
+                                'Scommerce_Canonical'
+                                );
+
     /**
      * @var \Magento\Framework\Module\Manager
      */
@@ -108,7 +112,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             if ($this->_moduleManager->isEnabled($modules)) {                
                 $moduleDataHelper = $this->getModuleDataHelper($modules);
                 $helper = $this->_objectManager->create($moduleDataHelper);
-                if($isActive = $helper->isModuleActive()){
+                if($isActive = $helper->isEnabled()){
                     return $isActive;
                 }
             }
