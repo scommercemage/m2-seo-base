@@ -63,6 +63,7 @@ class InstallData implements InstallDataInterface {
             $eavSetup->updateAttribute($entityType, $oldAttributeCode, 'attribute_code', 'product_primary_category');
             $eavSetup->updateAttribute($entityType, $oldAttributeCode, 'source_model', 'Scommerce\SeoBase\Model\Entity\Attribute\Source\Categories');
             $eavSetup->updateAttribute($entityType, $oldAttributeCode, 'frontend_label', 'Primary Category');
+            $eavSetup->updateAttribute($entityType, $oldAttributeCode, 'backend_type', 'int');
         } else if ($this->isProductAttributeExists($attributeCode)) {
             $eavSetup->updateAttribute($entityType, $attributeCode, 'source_model', 'Scommerce\SeoBase\Model\Entity\Attribute\Source\Categories');
 
