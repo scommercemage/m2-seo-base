@@ -54,10 +54,27 @@ class InstallData implements InstallDataInterface {
         /** @var EavSetup $eavSetup */
         $eavSetup = $this->eavSetupFactory->create(['setup' => $setup]);
 
+        $oldAttributeCode = 'canonical_primary_category';
         $attributeCode = 'product_primary_category';
-        if ($this->isProductAttributeExists($attributeCode)) {
-            $entityType = $eavSetup->getEntityTypeId(Product::ENTITY);
+        $groupName = 'Search Engine Optimization';
+        $entityType = $eavSetup->getEntityTypeId(Product::ENTITY);
+        if ($this->isProductAttributeExists($oldAttributeCode)) {
+
+            $eavSetup->updateAttribute($entityType, $oldAttributeCode, 'attribute_code', 'product_primary_category');
+            $eavSetup->updateAttribute($entityType, $oldAttributeCode, 'source_model', 'Scommerce\SeoBase\Model\Entity\Attribute\Source\Categories');
+            $eavSetup->updateAttribute($entityType, $oldAttributeCode, 'frontend_label', 'Primary Category');
+        } else if ($this->isProductAttributeExists($attributeCode)) {
             $eavSetup->updateAttribute($entityType, $attributeCode, 'source_model', 'Scommerce\SeoBase\Model\Entity\Attribute\Source\Categories');
+
+            // get the attribute set ids of all the attribute sets present in your Magento store
+            $attributeSetIds = $eavSetup->getAllAttributeSetIds($entityType);
+
+            foreach ($attributeSetIds as $attributeSetId) {
+                $attributeGroupId = $eavSetup->getAttributeGroupId($entityType, $attributeSetId, $groupName);
+                $eavSetup->addAttributeToGroup(
+                        $entityType, $attributeSetId, $attributeGroupId, $attributeCode, null
+                );
+            }
         } else {
             /**
              * Add attributes to the eav/attribute
@@ -72,11 +89,12 @@ class InstallData implements InstallDataInterface {
                 'class' => '',
                 'source' => 'Scommerce\SeoBase\Model\Entity\Attribute\Source\Categories',
                 'global' => \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_GLOBAL,
-                'group' => 'Primary Category',
+                'group' => $groupName,
                 'visible' => true,
                 'required' => false,
                 'user_defined' => false,
                 'default' => '',
+                'sort_order' => 200,
                 'searchable' => false,
                 'filterable' => false,
                 'comparable' => false,
@@ -101,5 +119,5 @@ class InstallData implements InstallDataInterface {
  
         return ($attr && $attr->getId()) ? true : false;
     }
-
+    
 }

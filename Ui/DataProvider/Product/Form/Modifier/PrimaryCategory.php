@@ -60,7 +60,7 @@ class PrimaryCategory extends AbstractModifier
      */
     protected function _customizeCategoryField(array $meta)
     {
-        $primaryCategoryGroup = 'primary-category';
+        $primaryCategoryGroup = 'search-engine-optimization';
         
         if(!$this->_helper->isChildModuleEnabled()){
             $meta = array_replace_recursive(
