@@ -10,6 +10,7 @@ namespace Scommerce\SeoBase\Ui\DataProvider\Product\Form\Modifier;
 
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
 use Scommerce\SeoBase\Helper\Data;
+use Magento\Framework\Stdlib\ArrayManager;
 
 /**
  * Class PrimaryCategory
@@ -18,7 +19,11 @@ use Scommerce\SeoBase\Helper\Data;
  */
 class PrimaryCategory extends AbstractModifier
 {
-   
+    /**
+     * @var Magento\Framework\Stdlib\ArrayManager
+     */
+    private $arrayManager;
+    
     /** 
     * @var \Scommerce\SeoBase\Helper\Data
     */
@@ -30,9 +35,12 @@ class PrimaryCategory extends AbstractModifier
      * @param Data $data
      */
     public function __construct(
+        ArrayManager $arrayManager,
         Data $data
     ) {
+        $this->arrayManager = $arrayManager;
         $this->_helper = $data;
+        
     }
 
     /**
@@ -60,22 +68,13 @@ class PrimaryCategory extends AbstractModifier
      */
     protected function _customizeCategoryField(array $meta)
     {
-        $primaryCategoryGroup = 'search-engine-optimization';
         
         if(!$this->_helper->isChildModuleEnabled()){
-            $meta = array_replace_recursive(
-            $meta,
-                [
-                    $primaryCategoryGroup => [
-                        'arguments' => [
-                            'data' => [
-                                'config' => [
-                                    'visible' => false
-                                ],
-                            ],
-                        ],
-                    ],
-                ]
+            
+            $attribute = 'product_primary_category';
+            $path = $this->arrayManager->findPath($attribute, $meta, null, 'children');
+            $meta = $this->arrayManager->set(
+                    "{$path}/arguments/data/config/visible", $meta, false
             );
         }
 
