@@ -36,7 +36,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     protected $_modulesList = array(
                                 'Scommerce_CatalogUrl',
-                                'Scommerce_Canonical'
+                                'Scommerce_Canonical',
+                                'Scommerce_SeoSitemap'
                                 );
 
     /**
@@ -106,8 +107,16 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @return bool
      */
     public function isLicenseValid(){
-		$sku = strtolower(str_replace('\\Helper\\Data','',str_replace('Scommerce\\','',get_class($this))));
-		return $this->_data->isLicenseValid($this->getLicenseKey(),$sku);
+        
+        $seoModuleSkus = array('seobase', 'catalogurl', 'canonical');
+        $isValid = false;
+        foreach ($seoModuleSkus as $sku) {
+            $isValid = $this->_data->isLicenseValid($this->getLicenseKey(), $sku);
+            if ($isValid)
+                break;
+        }
+        return $isValid;
+
     }
     
     /**
