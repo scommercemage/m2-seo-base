@@ -35,7 +35,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @var modulesList array
      */
     protected $_modulesList = array(
-                                'Scommerce_CatalogUrl'
+                                'Scommerce_CatalogUrl',
+                                'Scommerce_Canonical'
                                 );
 
     /**

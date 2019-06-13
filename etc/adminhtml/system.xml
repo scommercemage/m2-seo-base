@@ -23,6 +23,7 @@
                    showInDefault="1"
                    showInWebsite="1"
                    showInStore="1">
+                <label>General</label>
                     <field id="enabled"
                        translate="label"
                        type="select"
