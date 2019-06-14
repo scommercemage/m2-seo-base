@@ -33,6 +33,11 @@ class InstallData implements InstallDataInterface {
      * @var \Magento\Eav\Model\Config
      */
     private $eavConfig;
+    
+    /**
+     * @var \Magento\Eav\Model\Config
+     */
+    private $helper;
 
     /**
      * __construct
@@ -40,10 +45,12 @@ class InstallData implements InstallDataInterface {
      * @param EavSetupFactory $eavSetupFactory
      */
     public function __construct(EavSetupFactory $eavSetupFactory, 
-            \Magento\Eav\Model\Config $eavConfig
+            \Magento\Eav\Model\Config $eavConfig,
+            \Scommerce\SeoBase\Helper\Config $helper
     ) {
         $this->eavSetupFactory = $eavSetupFactory;
         $this->eavConfig = $eavConfig;
+        $this->helper = $resource;
     }
 
     /**
@@ -89,13 +96,13 @@ class InstallData implements InstallDataInterface {
                 'input' => 'select',
                 'class' => '',
                 'source' => 'Scommerce\SeoBase\Model\Entity\Attribute\Source\Categories',
-                'global' => \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_GLOBAL,
+                'global' => \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_STORE,
                 'group' => $groupName,
                 'visible' => true,
                 'required' => false,
-                'user_defined' => false,
+                'user_defined' => true,
                 'default' => '',
-                'sort_order' => 200,
+                'sort_order' => 300,
                 'searchable' => false,
                 'filterable' => false,
                 'comparable' => false,
@@ -105,6 +112,9 @@ class InstallData implements InstallDataInterface {
                     ]
             );
         }
+        
+        //Update config setting
+        $this->helper->updateConfig();
     }
 
     /**

@@ -13,7 +13,7 @@ namespace Scommerce\SeoBase\Setup;;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\UpgradeDataInterface;
-
+use Magento\Framework\App\Config\Storage\WriterInterface;
 /**
  * Upgrade Data script
  *
@@ -36,6 +36,11 @@ class UpgradeData implements UpgradeDataInterface {
      */
     private $scopeConfig;
     
+    
+   protected $configData = array(); 
+        
+   
+    
     /**
      * @const config path
      */
@@ -52,6 +57,7 @@ class UpgradeData implements UpgradeDataInterface {
         \Magento\Config\Model\Config $config,
         \Scommerce\SeoBase\Helper\Data $helper,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+    
     ) {
         $this->config = $config;
         $this->helper = $helper;
@@ -80,7 +86,7 @@ class UpgradeData implements UpgradeDataInterface {
             $this->config->save();
         }
     }
-    
+
     /**
      * Check, if old modules have license key
      * @return false| string
@@ -95,6 +101,10 @@ class UpgradeData implements UpgradeDataInterface {
         } else {
             return $licenseKey;
         }
+    }
+
+    protected function updateConfigData() {
+        
     }
 
 }
