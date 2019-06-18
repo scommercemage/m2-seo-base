@@ -20,17 +20,15 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * @const config path
      */
-    const EXCLUDE_CATEGORIES   = 'scommerce_seobase/general/exclude_categories';
+    const EXCLUDE_CATEGORIES   = 'scommerce_url/general/exclude_categories';
     
     const ENABLED              = 'scommerce_seobase/general/enabled';
     
     const LICENSE_KEY = 'scommerce_seobase/general/license_key';
     
-    /**
-     * @const data helper
-     */
-    const DATA_HELPER = '\Helper\Data';
+    const XML_PATH_PRODUCT_URL_USE_CATEGORY = 'catalog/seo/product_use_categories';
     
+   
     /**
      * @var modulesList array
      */
