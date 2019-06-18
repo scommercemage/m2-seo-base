@@ -36,7 +36,7 @@ class Categories extends \Magento\Eav\Model\Entity\Attribute\Source\Table
     public function __construct(
         \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory,
         \Magento\Framework\Registry $registry,
-        \Scommerce\CatalogUrl\Helper\Data $helper,
+        \Scommerce\SeoBase\Helper\Data $helper,
         \Magento\Store\Model\StoreManagerInterface $storeManager
     ) {
         $this->_categoryCollectionFactory = $categoryCollectionFactory;
