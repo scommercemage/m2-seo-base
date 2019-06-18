@@ -14,13 +14,7 @@ namespace Scommerce\SeoBase\Helper;
  * @package Scommerce_SeoBase
  */
 class Config extends \Magento\Framework\App\Helper\AbstractHelper {
-    
-    /**
-     * @var array 
-     */
-    protected $_catalogConfigData = array(
-        'scommerce_seobase/general/exclude_categories' => 'scommerce_url/general/exclude_categories');
-     
+       
     /**
      * @var array 
      */
@@ -62,7 +56,6 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper {
      * update config
      */
     public function updateConfig() {
-        $this->updateCanonicalConfig($this->_catalogConfigData);
         $this->updateCanonicalConfig($this->_richSnippetConfigData);
     }
 
