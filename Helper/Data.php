@@ -25,9 +25,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     const ENABLED              = 'scommerce_seobase/general/enabled';
     
     const LICENSE_KEY = 'scommerce_seobase/general/license_key';
-    
-    const XML_PATH_PRODUCT_URL_USE_CATEGORY = 'catalog/seo/product_use_categories';
-    
+      
    
     /**
      * @var modulesList array
