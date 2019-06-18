@@ -56,11 +56,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     protected $_data;
 
     /**
-     * @var \Magento\Catalog\Model\CategoryFactory 
-     */
-    protected $_categoryFactory;
-
-    /**
      * __construct
      * 
      * @param \Magento\Framework\App\Helper\Context $context
@@ -69,13 +64,11 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
         \Magento\Framework\Module\Manager $moduleManager,
-        \Scommerce\Core\Helper\Data $data,
-        \Magento\Catalog\Model\CategoryFactory $categoryFactory
+        \Scommerce\Core\Helper\Data $data
     ) {
         parent::__construct($context);
         $this->_moduleManager = $moduleManager;
         $this->_data = $data;
-        $this->_categoryFactory = $categoryFactory;
         $this->_objectManager = \Magento\Framework\App\ObjectManager::getInstance();
     }
     
@@ -175,43 +168,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
         foreach ($this->_modulesList as $modules) {
             if ($this->_moduleManager->isEnabled($modules)) {                
-                $moduleDataHelper = $this->getModuleDataHelper($modules);
-                $helper = $this->_objectManager->create($moduleDataHelper);
-                if($isActive = $helper->isEnabled()){
-                    return $isActive;
-                }
+                return true;
             }
         }
     }
-    
-    /**
-     * Get module helper class
-     * 
-     * @param type $modules
-     * @return type
-     */
-    protected function getModuleDataHelper($modules) {        
-        $helper = str_replace("_",'\\',$modules);
-        return $helper . self::DATA_HELPER;
-    }
-    
-    /**
-     * Generating product request path
-     *
-     * @param \Magento\Catalog\Model\Product $product
-     * @return string
-     */
-    public function productRequestPath($product)
-    { 
-        $product = $product->load($product->getId()); // Really hack for product listing in grid/list
-        $productPrimaryCategory = $product->getCustomAttribute('product_primary_category');
-        if (! $productPrimaryCategory) return '';
-        $primaryCategoryId = $productPrimaryCategory->getValue();
-        if (is_array($primaryCategoryId)) $primaryCategoryId = end($primaryCategoryId);
-        $primaryCategoryId = (int)$primaryCategoryId;
-        if (empty($primaryCategoryId)) return '';
-        return $this->_categoryFactory->create()->load($primaryCategoryId);
-
-    }
-
 }

@@ -8,12 +8,12 @@
  * @author     Sommerce Mage <core@scommerce-mage.co.uk>
  */
 
-namespace Scommerce\SeoBase\Setup;;
+namespace Scommerce\SeoBase\Setup;
 
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\UpgradeDataInterface;
-use Magento\Framework\App\Config\Storage\WriterInterface;
+
 /**
  * Upgrade Data script
  *
@@ -39,13 +39,13 @@ class UpgradeData implements UpgradeDataInterface {
     
    protected $configData = array(); 
         
-   
+   protected $_licenseKey = array('scommerce_canonical/general/license_key',
+       'scommerce_url/general/license_key',
+       'scommerce_google_cards/general/license_key' );
     
     /**
      * @const config path
      */
-    const CANONICAL_LICENSE_KEY = 'scommerce_canonical/general/license_key';
-    const CATALOG_URL_LICENSE_KEY = 'scommerce_url/general/license_key';
     const SEOBASE_LICENSE_KEY = 'scommerce_seobase/general/license_key';
     
     /**
@@ -61,7 +61,7 @@ class UpgradeData implements UpgradeDataInterface {
     ) {
         $this->config = $config;
         $this->helper = $helper;
-        $this->scopeConfig = $scopeConfig;;
+        $this->scopeConfig = $scopeConfig;
     }
    
     /**
@@ -92,19 +92,12 @@ class UpgradeData implements UpgradeDataInterface {
      * @return false| string
      */
     protected function getLicenseKey() {
-        $licenseKey = false;
 
-        if ($licenseKey = $this->scopeConfig->getValue(self::CATALOG_URL_LICENSE_KEY)) {
-            return $licenseKey;
-        } else if ($licenseKey = $this->scopeConfig->getValue(self::CATALOG_URL_LICENSE_KEY)) {
-            return $licenseKey;
-        } else {
-            return $licenseKey;
+        foreach ($this->_licenseKey as $key) {
+            if ($licenseKey = $this->scopeConfig->getValue($key)) {
+                return $licenseKey;
+            } 
         }
-    }
-
-    protected function updateConfigData() {
-        
     }
 
 }

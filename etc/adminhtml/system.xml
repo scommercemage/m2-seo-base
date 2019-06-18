@@ -43,17 +43,6 @@
                        showInStore="1">
                     <label>License Key</label>
                 </field>
-                <field id="exclude_categories"
-                       translate="label"
-                       type="multiselect"
-                       sortOrder="60"
-                       showInDefault="1"
-                       showInWebsite="1"
-                       showInStore="1">
-                    <label>Exclude Root Categories</label>
-                    <source_model>Scommerce\SeoBase\Model\ExcludeCategories</source_model>
-                    <comment><![CDATA[Exclude some root categories to appear in parent category dropdown against products]]></comment>
-                </field>
             </group>
         </section>
     </system>
