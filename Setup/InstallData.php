@@ -50,7 +50,7 @@ class InstallData implements InstallDataInterface {
     ) {
         $this->eavSetupFactory = $eavSetupFactory;
         $this->eavConfig = $eavConfig;
-        $this->helper = $resource;
+        $this->helper = $helper;
     }
 
     /**
