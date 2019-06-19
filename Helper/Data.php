@@ -32,8 +32,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     protected $_modulesList = array(
                                 'Scommerce_CatalogUrl',
-                                'Scommerce_Canonical',
-                                'Scommerce_SeoSitemap'
+                                'Scommerce_Canonical'
                                 );
 
     /**
@@ -97,7 +96,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function isLicenseValid(){
         
-        $seoModuleSkus = array('seobase', 'catalogurl', 'canonical');
+        $seoModuleSkus = array('seobase', 'catalogurl', 'canonical', 'richsnippet');
         $isValid = false;
         foreach ($seoModuleSkus as $sku) {
             $isValid = $this->_data->isLicenseValid($this->getLicenseKey(), $sku);
@@ -161,11 +160,42 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function isChildModuleEnabled() {
+        $catalogUrlActive = $this->isScommerceCatalogUrlModuleEnabled();
+        $canonicalUrlActive = $this->isScommerceCanonicalModuleEnabled();
 
-        foreach ($this->_modulesList as $modules) {
-            if ($this->_moduleManager->isEnabled($modules)) {                
-                return true;
-            }
+        if ($catalogUrlActive || $canonicalUrlActive) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Returns if module exists or not
+     *
+     * @return bool
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function isScommerceCatalogUrlModuleEnabled() {
+        $enable = $this->_moduleManager->isEnabled('Scommerce_CatalogUrl');
+        if ($enable) {
+            $catalogUrlhelper = $this->_objectManager->get('Scommerce\CatalogUrl\Helper\Data');
+            return $catalogUrlhelper->isCatalogUrlActive();
+        }
+    }
+    
+    
+    /**
+     * Returns if module exists or not
+     *
+     * @return bool
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function isScommerceCanonicalModuleEnabled() {
+        $enable = $this->_moduleManager->isEnabled('Scommerce_Canonical');
+        if ($enable) {
+            $helper = $this->_objectManager->get('Scommerce\Canonical\Helper\Data');
+            return $helper->isEnabled();
         }
     }
 }
