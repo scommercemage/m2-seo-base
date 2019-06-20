@@ -56,7 +56,7 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper {
      * update config
      */
     public function updateConfig() {
-        $this->updateCanonicalConfig($this->_richSnippetConfigData);
+        $this->updateRichSnippetConfig($this->_richSnippetConfigData);
     }
 
     /**
@@ -64,7 +64,7 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper {
      * 
      * @param array $congfigData
      */
-    protected function updateCanonicalConfig($congfigData) { 
+    protected function updateRichSnippetConfig($congfigData) { 
         
         $connection = $this->_resource->getConnection();
         
