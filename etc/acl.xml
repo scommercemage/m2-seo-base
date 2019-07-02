@@ -6,8 +6,12 @@
                 <resource id="Magento_Backend::stores">
                     <resource id="Magento_Backend::stores_settings">
                         <resource id="Magento_Config::config">
-                            <!-- this resource id we can use in system.xml for section -->
-                            <resource id="Scommerce_SeoBase::config_seobase" title="Category Url Section" sortOrder="80" />
+                            <resource id="Scommerce_Core::config"
+                                      title="Scommerce"
+                                      translate="title"
+                                      sortOrder="10">                                
+                                <resource id="Scommerce_SeoBase::config_seobase" title="Seo Base" sortOrder="20" />
+                            </resource>
                         </resource>
                     </resource>
                 </resource>
