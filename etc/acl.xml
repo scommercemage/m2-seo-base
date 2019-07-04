@@ -6,12 +6,7 @@
                 <resource id="Magento_Backend::stores">
                     <resource id="Magento_Backend::stores_settings">
                         <resource id="Magento_Config::config">
-                            <resource id="Scommerce_Core::config"
-                                      title="Scommerce"
-                                      translate="title"
-                                      sortOrder="10">                                
-                                <resource id="Scommerce_SeoBase::config_seobase" title="Seo Base" sortOrder="20" />
-                            </resource>
+                            <resource id="Scommerce_SeoBase::config_seobase" title="Scommerce Seo Base" sortOrder="20" />
                         </resource>
                     </resource>
                 </resource>
