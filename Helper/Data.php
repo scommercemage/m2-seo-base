@@ -10,12 +10,17 @@
 namespace Scommerce\SeoBase\Helper;
 
 use Magento\Store\Model\ScopeInterface;
-
+use Magento\Framework\App\Helper\AbstractHelper;
+use Magento\Framework\Module\Manager;
+use Magento\Framework\App\ObjectManager;
+use Scommerce\Core\Helper\Data as HelperData;
+use Magento\Framework\App\Helper\Context;
+use Magento\Framework\Exception\LocalizedException;
 /**
  * Class Data
  * @package Scommerce_SeoBase
  */
-class Data extends \Magento\Framework\App\Helper\AbstractHelper
+class Data extends AbstractHelper
 {
     /**
      * @const config path
@@ -24,7 +29,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     
     const ENABLED              = 'scommerce_seobase/general/enabled';
     
-    const LICENSE_KEY = 'scommerce_seobase/general/license_key';
+    const LICENSE_KEY          = 'scommerce_seobase/general/license_key';
       
    
     /**
@@ -36,38 +41,45 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
                                 );
 
     /**
-     * @var \Magento\Framework\Module\Manager
+     * @var Manager
      */
     protected $_moduleManager;
     
     /**
-     * @var \Magento\Framework\App\ObjectManager::getInstance()
+     * @var ObjectManager
      */
     protected $_objectManager;    
     
     /**
-     * @var \Scommerce\Core\Helper\Data
+     * @var HelperData
      */
     protected $_data;
 
     /**
+     * @var bool
+     */
+    private $_enabled;
+
+    /**
      * __construct
      * 
-     * @param \Magento\Framework\App\Helper\Context $context
-     * @param \Magento\Framework\Module\Manager $moduleManager
+     * @param Context $context
+     * @param Manager $moduleManager
+     * @param HelperData $data
      */
     public function __construct(
-        \Magento\Framework\App\Helper\Context $context,
-        \Magento\Framework\Module\Manager $moduleManager,
-        \Scommerce\Core\Helper\Data $data
+        Context $context,
+        Manager $moduleManager,
+        HelperData $data
     ) {
         parent::__construct($context);
         $this->_moduleManager = $moduleManager;
         $this->_data = $data;
-        $this->_objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+        $this->_enabled = null;
+
+        $this->_objectManager = ObjectManager::getInstance();
     }
-    
-    
+
     /**
      * Is Catalog Url module active
      *
@@ -75,8 +87,11 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function isEnabled()
     {
-        $enabled = $this->isSetFlag(self::ENABLED);
-        return $this->isCliMode() ? $enabled : $enabled && $this->isLicenseValid();
+        if ($this->_enabled==null){
+            $enabled = $this->isSetFlag(self::ENABLED);
+            $this->_enabled = $this->isCliMode() ? $enabled : $enabled && $this->isLicenseValid();
+        }
+        return $this->_enabled;
     }
     
     /**
@@ -94,24 +109,16 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @return bool
      */
-    public function isLicenseValid(){
-        
-        $seoModuleSkus = array('seobase', 
-            'seosuite', 
-            'hreflang', 
-            'seositemap', 
-            'richsnippet', 
-            'catalogurl', 
-            'canonical', 
-            'crosslinking');
+    public function isLicenseValid()
+    {
+        $seoModuleSKUs = array('seobase', 'seosuite', 'hreflang', 'seositemap', 'richsnippet', 'catalogurl', 'canonical');
         $isValid = false;
-        foreach ($seoModuleSkus as $sku) {
+        foreach ($seoModuleSKUs as $sku) {
             $isValid = $this->_data->isLicenseValid($this->getLicenseKey(), $sku);
             if ($isValid)
                 break;
         }
         return $isValid;
-
     }
     
     /**
@@ -164,7 +171,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Returns if module exists or not
      *
      * @return bool
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function isChildModuleEnabled() {
         $catalogUrlActive = $this->isScommerceCatalogUrlModuleEnabled();
@@ -181,7 +188,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Returns if module exists or not
      *
      * @return bool
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function isScommerceCatalogUrlModuleEnabled() {
         $enable = $this->_moduleManager->isEnabled('Scommerce_CatalogUrl');
@@ -196,7 +203,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Returns if module exists or not
      *
      * @return bool
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function isScommerceCanonicalModuleEnabled() {
         $enable = $this->_moduleManager->isEnabled('Scommerce_Canonical');
