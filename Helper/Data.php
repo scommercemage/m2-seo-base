@@ -1,6 +1,6 @@
 <?php
 /**
- * SeoBase Helper  
+ * SeoBase Helper
  *
  * @category   Scommerce
  * @package    Scommerce_SeoBase
@@ -26,30 +26,30 @@ class Data extends AbstractHelper
      * @const config path
      */
     const EXCLUDE_CATEGORIES   = 'scommerce_url/general/exclude_categories';
-    
+
     const ENABLED              = 'scommerce_seobase/general/enabled';
-    
+
     const LICENSE_KEY          = 'scommerce_seobase/general/license_key';
-      
-   
+
+
     /**
      * @var modulesList array
      */
     protected $_modulesList = array(
-                                'Scommerce_CatalogUrl',
-                                'Scommerce_Canonical'
-                                );
+        'Scommerce_CatalogUrl',
+        'Scommerce_Canonical'
+    );
 
     /**
      * @var Manager
      */
     protected $_moduleManager;
-    
+
     /**
      * @var ObjectManager
      */
-    protected $_objectManager;    
-    
+    protected $_objectManager;
+
     /**
      * @var HelperData
      */
@@ -58,11 +58,11 @@ class Data extends AbstractHelper
     /**
      * @var bool
      */
-    private $_enabled;
+    static $_seoEnabled = null;
 
     /**
      * __construct
-     * 
+     *
      * @param Context $context
      * @param Manager $moduleManager
      * @param HelperData $data
@@ -75,8 +75,6 @@ class Data extends AbstractHelper
         parent::__construct($context);
         $this->_moduleManager = $moduleManager;
         $this->_data = $data;
-        $this->_enabled = null;
-
         $this->_objectManager = ObjectManager::getInstance();
     }
 
@@ -87,13 +85,13 @@ class Data extends AbstractHelper
      */
     public function isEnabled()
     {
-        if ($this->_enabled==null){
+        if (self::$_seoEnabled==null){
             $enabled = $this->isSetFlag(self::ENABLED);
-            $this->_enabled = $this->isCliMode() ? $enabled : $enabled && $this->isLicenseValid();
+            self::$_seoEnabled = $this->isCliMode() ? $enabled : $enabled && $this->isLicenseValid();
         }
-        return $this->_enabled;
+        return self::$_seoEnabled;
     }
-    
+
     /**
      * Returns license key administration configuration option
      *
@@ -103,7 +101,7 @@ class Data extends AbstractHelper
     {
         return $this->getValue(self::LICENSE_KEY);
     }
-    
+
     /**
      * returns whether license key is valid or not
      *
@@ -120,7 +118,7 @@ class Data extends AbstractHelper
         }
         return $isValid;
     }
-    
+
     /**
      * Helper method for retrieve config value by path and scope
      *
@@ -156,7 +154,7 @@ class Data extends AbstractHelper
     {
         return php_sapi_name() === 'cli';
     }
-    
+
     /**
      * Get exclude categories ids
      *
@@ -165,8 +163,8 @@ class Data extends AbstractHelper
     public function getExcludeCategories()
     {
         return $this->getValue(self::EXCLUDE_CATEGORIES);
-    }  
-    
+    }
+
     /**
      * Returns if module exists or not
      *
@@ -197,8 +195,8 @@ class Data extends AbstractHelper
             return $catalogUrlhelper->isCatalogUrlActive();
         }
     }
-    
-    
+
+
     /**
      * Returns if module exists or not
      *
