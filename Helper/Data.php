@@ -109,14 +109,8 @@ class Data extends AbstractHelper
      */
     public function isLicenseValid()
     {
-        $seoModuleSKUs = array('seobase', 'seosuite', 'hreflang', 'seositemap', 'richsnippet', 'catalogurl', 'canonical');
-        $isValid = false;
-        foreach ($seoModuleSKUs as $sku) {
-            $isValid = $this->_data->isLicenseValid($this->getLicenseKey(), $sku);
-            if ($isValid)
-                break;
-        }
-        return $isValid;
+        $sku = strtolower(str_replace('\\Helper\\Data', '', str_replace('Scommerce\\', '', get_class())));
+        return $this->_data->isLicenseValid($this->getLicenseKey(), $sku);
     }
 
     /**
