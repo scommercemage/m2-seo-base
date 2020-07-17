@@ -82,7 +82,7 @@ class UpgradeData implements UpgradeDataInterface {
     protected function copyLicenseKey() {
 
         if ($key = $this->getLicenseKey()) {
-            $this->config->setDataByPath(self::SEOBASE_LICENSE_KEY, $key);
+            $this->config->setDataByPath(self::SEOBASE_LICENSE_KEY, $key, 'default', 0);
             $this->config->save();
         }
     }
