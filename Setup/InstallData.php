@@ -112,9 +112,6 @@ class InstallData implements InstallDataInterface {
                     ]
             );
         }
-        
-        //Update config setting
-        $this->helper->updateConfig();
     }
 
     /**
