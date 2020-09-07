@@ -16,6 +16,7 @@ use Magento\Framework\Setup\InstallDataInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Catalog\Model\Product;
+use Magento\Eav\Model\Config;
 
 /**
  * @codeCoverageIgnore
@@ -30,27 +31,21 @@ class InstallData implements InstallDataInterface {
     private $eavSetupFactory;
     
     /**
-     * @var \Magento\Eav\Model\Config
+     * @var Config
      */
     private $eavConfig;
-    
-    /**
-     * @var \Magento\Eav\Model\Config
-     */
-    private $helper;
 
     /**
      * __construct
      *
      * @param EavSetupFactory $eavSetupFactory
+     * @param Config $eavConfig
      */
     public function __construct(EavSetupFactory $eavSetupFactory, 
-            \Magento\Eav\Model\Config $eavConfig,
-            \Scommerce\SeoBase\Helper\Config $helper
+            Config $eavConfig
     ) {
         $this->eavSetupFactory = $eavSetupFactory;
         $this->eavConfig = $eavConfig;
-        $this->helper = $helper;
     }
 
     /**
@@ -112,9 +107,6 @@ class InstallData implements InstallDataInterface {
                     ]
             );
         }
-        
-        //Update config setting
-        $this->helper->updateConfig();
     }
 
     /**
