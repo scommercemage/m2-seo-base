@@ -61,13 +61,16 @@ class InstallData implements InstallDataInterface {
         $groupName = 'Search Engine Optimization';
         $entityType = $eavSetup->getEntityTypeId(Product::ENTITY);
         if ($this->isProductAttributeExists($oldAttributeCode)) {
-
-            $eavSetup->updateAttribute($entityType, $oldAttributeCode, 'attribute_code', 'product_primary_category');
             $eavSetup->updateAttribute($entityType, $oldAttributeCode, 'source_model', 'Scommerce\SeoBase\Model\Entity\Attribute\Source\Categories');
             $eavSetup->updateAttribute($entityType, $oldAttributeCode, 'frontend_label', 'Primary Category');
             $eavSetup->updateAttribute($entityType, $oldAttributeCode, 'backend_type', 'int');
+            $eavSetup->updateAttribute($entityType, $oldAttributeCode, 'group', $groupName);
+            $eavSetup->updateAttribute($entityType, $oldAttributeCode, 'global', \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_STORE);
+            $eavSetup->updateAttribute($entityType, $oldAttributeCode, 'attribute_code', 'product_primary_category');
         } else if ($this->isProductAttributeExists($attributeCode)) {
             $eavSetup->updateAttribute($entityType, $attributeCode, 'source_model', 'Scommerce\SeoBase\Model\Entity\Attribute\Source\Categories');
+            $eavSetup->updateAttribute($entityType, $attributeCode, 'group', $groupName);
+            $eavSetup->updateAttribute($entityType, $attributeCode, 'global', \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_STORE);
 
             // get the attribute set ids of all the attribute sets present in your Magento store
             $attributeSetIds = $eavSetup->getAllAttributeSetIds($entityType);
