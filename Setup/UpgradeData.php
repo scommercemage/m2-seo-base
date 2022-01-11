@@ -110,6 +110,7 @@ class UpgradeData implements UpgradeDataInterface {
         }
         
         if (version_compare($context->getVersion(), '2.0.12', '<')) {
+            $eavSetup = $this->eavSetupFactory->create(['setup' => $setup]);
             $attributeCode = 'product_primary_category';
             $groupName = 'Search Engine Optimization';
             $entityType = $eavSetup->getEntityTypeId(Product::ENTITY);
