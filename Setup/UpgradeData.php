@@ -108,6 +108,18 @@ class UpgradeData implements UpgradeDataInterface {
         if(!$this->helper->getLicenseKey(self::SEOBASE_LICENSE_KEY)) {
             $this->copyLicenseKey();
         }
+        
+        if (version_compare($context->getVersion(), '2.0.12', '<')) {
+            $attributeCode = 'product_primary_category';
+            $groupName = 'Search Engine Optimization';
+            $entityType = $eavSetup->getEntityTypeId(Product::ENTITY);
+            if ($this->isProductAttributeExists($attributeCode)) {
+                $eavSetup->updateAttribute($entityType, $attributeCode, 'source_model', 'Scommerce\SeoBase\Model\Entity\Attribute\Source\Categories');
+                $eavSetup->updateAttribute($entityType, $attributeCode, 'group', $groupName);
+                $eavSetup->updateAttribute($entityType, $attributeCode, 'global', \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_STORE);
+            }
+        }
+        
         if (version_compare($context->getVersion(), '2.0.11', '<')) {
             /** @var CategorySetup $categorySetup */
             $categorySetup = $this->categorySetupFactory->create(['setup' => $setup]);
