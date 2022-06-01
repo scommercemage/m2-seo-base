@@ -3,6 +3,7 @@
 use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\ObjectManager;
 
+// @codingStandardsIgnoreStart
 require __DIR__ . '/app/bootstrap.php';
 
 $bootstrap = Bootstrap::create(BP, $_SERVER);
@@ -134,7 +135,5 @@ if (strlen($entity_type_id)>0 &&  strlen($attribute_id)>0){
 else{
 	echo 'Sorry, nothing to create please check entity_type_id and attribute_id';
 }
+// @codingStandardsIgnoreEnd
 
-
-
-?>

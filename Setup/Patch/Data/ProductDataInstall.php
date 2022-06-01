@@ -1,60 +1,55 @@
 <?php
 
-/**
- * Install script will add product attribute
- *
- * @category   Scommerce
- * @package    Scommerce_SeoBase
- * @author     Sommerce Mage <core@scommerce-mage.co.uk>
- */
+namespace Scommerce\SeoBase\Setup\Patch\Data;
 
-namespace Scommerce\SeoBase\Setup;
-
+use Magento\Catalog\Model\Product;
+use Magento\Config\Model\ResourceModel\Config;
+use Magento\Framework\Setup\Patch\DataPatchInterface;
 use Magento\Eav\Setup\EavSetup;
 use Magento\Eav\Setup\EavSetupFactory;
-use Magento\Framework\Setup\InstallDataInterface;
-use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
-use Magento\Catalog\Model\Product;
-use Magento\Eav\Model\Config;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 
-/**
- * @codeCoverageIgnore
- */
-class InstallData implements InstallDataInterface {
+
+class ProductDataInstall implements DataPatchInterface
+{
 
     /**
-     * EAV setup factory
-     *
+     * @var ModuleDataSetupInterface
+     */
+    private $moduleDataSetup;
+    /**
      * @var EavSetupFactory
      */
     private $eavSetupFactory;
-    
+
     /**
-     * @var Config
+     * @var \Magento\Eav\Model\Config
      */
     private $eavConfig;
 
     /**
-     * __construct
-     *
+     * @param ModuleDataSetupInterface $moduleDataSetup
+     * @param \Magento\Eav\Model\Config $eavConfig
      * @param EavSetupFactory $eavSetupFactory
-     * @param Config $eavConfig
      */
-    public function __construct(EavSetupFactory $eavSetupFactory, 
-            Config $eavConfig
-    ) {
-        $this->eavSetupFactory = $eavSetupFactory;
+    public function __construct(
+        ModuleDataSetupInterface $moduleDataSetup,
+        \Magento\Eav\Model\Config $eavConfig,
+        EavSetupFactory          $eavSetupFactory
+    )
+    {
+        $this->moduleDataSetup = $moduleDataSetup;
         $this->eavConfig = $eavConfig;
+        $this->eavSetupFactory = $eavSetupFactory;
     }
 
-    /**
-     * {@inheritdoc}
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     */
-    public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context) {
+    public function apply()
+    {
+        $this->moduleDataSetup->getConnection()->startSetup();
         /** @var EavSetup $eavSetup */
-        $eavSetup = $this->eavSetupFactory->create(['setup' => $setup]);
+        $eavSetup = $this->eavSetupFactory->create(['setup' => $this->moduleDataSetup]);
+
 
         $oldAttributeCode = 'canonical_primary_category';
         $attributeCode = 'product_primary_category';
@@ -78,7 +73,7 @@ class InstallData implements InstallDataInterface {
             foreach ($attributeSetIds as $attributeSetId) {
                 $attributeGroupId = $eavSetup->getAttributeGroupId($entityType, $attributeSetId, $groupName);
                 $eavSetup->addAttributeToGroup(
-                        $entityType, $attributeSetId, $attributeGroupId, $attributeCode, null
+                    $entityType, $attributeSetId, $attributeGroupId, $attributeCode, null
                 );
             }
         } else {
@@ -86,44 +81,55 @@ class InstallData implements InstallDataInterface {
              * Add attributes to the eav/attribute
              */
             $eavSetup->addAttribute(
-                    Product::ENTITY, $attributeCode, [
-                'type' => 'int',
-                'backend' => '',
-                'frontend' => '',
-                'label' => 'Primary Category',
-                'input' => 'select',
-                'class' => '',
-                'source' => 'Scommerce\SeoBase\Model\Entity\Attribute\Source\Categories',
-                'global' => \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_STORE,
-                'group' => $groupName,
-                'visible' => true,
-                'required' => false,
-                'user_defined' => true,
-                'default' => '',
-                'sort_order' => 300,
-                'searchable' => false,
-                'filterable' => false,
-                'comparable' => false,
-                'visible_on_front' => false,
-                'used_in_product_listing' => false,
-                'unique' => false
-                    ]
+                Product::ENTITY, $attributeCode, [
+                    'type' => 'int',
+                    'backend' => '',
+                    'frontend' => '',
+                    'label' => 'Primary Category',
+                    'input' => 'select',
+                    'class' => '',
+                    'source' => 'Scommerce\SeoBase\Model\Entity\Attribute\Source\Categories',
+                    'global' => \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_STORE,
+                    'group' => $groupName,
+                    'visible' => true,
+                    'required' => false,
+                    'user_defined' => true,
+                    'default' => '',
+                    'sort_order' => 300,
+                    'searchable' => false,
+                    'filterable' => false,
+                    'comparable' => false,
+                    'visible_on_front' => false,
+                    'used_in_product_listing' => false,
+                    'unique' => false
+                ]
             );
         }
+
+        $this->moduleDataSetup->getConnection()->endSetup();
     }
 
-    /**
-     * Returns true if attribute exists and false if it doesn't exist
-     *
-     * @param string $field
-     * @return bool
-     * @throws \Magento\Framework\Exception\LocalizedException
-     */
     protected function isProductAttributeExists($field)
     {
         $attr = $this->eavConfig->getAttribute(Product::ENTITY, $field);
- 
+
         return ($attr && $attr->getId()) ? true : false;
     }
-    
+
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAliases()
+    {
+        return [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getDependencies()
+    {
+        return [];
+    }
 }
