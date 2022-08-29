@@ -119,7 +119,9 @@ class ProductDataUpgrade2 implements DataPatchInterface
                 'sort'  => 10,
                 'type'  => 'int',
                 'input' => 'boolean',
-                'label' => 'Exclude From Primary Category'
+                'label' => 'Exclude From Primary Category',
+                'default' => false,
+                'required' => false
             ],
             'primary_category_priority' => [
                 'group' => 'primary_category_settings',
@@ -127,7 +129,8 @@ class ProductDataUpgrade2 implements DataPatchInterface
                 'type'  => 'int',
                 'input' => 'text',
                 'default' => 0,
-                'label' => 'Priority'
+                'label' => 'Priority',
+                'required' => false
             ],
         ];
 
